@@ -8,16 +8,16 @@ csv_file_path_train = "train.csv"
 csv_file_path_tran = "transactions.csv"
 csv_file_currency = "currency_rk.csv"
 csv_file_path_mcc_codes = "mcc_codes.csv"
-def pre_norm(s):
+def pre_norm(s,sMin,sMax):
     if s.startswith("БОЛЕЕ"):
-       return [int(s.split(" ")[1])+1,math.inf]
+        return [int(s.split(" ")[1]) + 1, sMax]
     elif s.startswith("NA"):
         return [0]
     elif s.startswith("ДО"):
-        return [-math.inf,int(s.split(" ")[1])]  
-    elif s.startswith("ОТ") :
+        return [sMin, int(s.split(" ")[1])]
+    elif s.startswith("ОТ"):
         tmp_s = s.split(" ")
-        return [int(tmp_s[1]),int(tmp_s[3])]          
+        return [int(tmp_s[1]), int(tmp_s[3])]
     return None
 
 def read_cliests(csv_file_path):
@@ -25,7 +25,7 @@ def read_cliests(csv_file_path):
     reports = []
     employee_count_nms = []
     bankemplstatus_arr = []
-    customer_ages = []   
+    customer_ages = []
     with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
@@ -34,7 +34,7 @@ def read_cliests(csv_file_path):
         for row in csv_reader:
             user_ids.append(int(row[0]))
             reports.append(int(row[1]))
-            employee_count_nms.append(pre_norm(row[2]))
+            employee_count_nms.append(pre_norm(row[2],min(row[2]),max(row[2])))
             bankemplstatus_arr.append(int(row[3]))
             customer_ages.append(int(row[4]))
     return {
@@ -139,3 +139,14 @@ def load_data():
         "reports_dates": read_reports(csv_file_path_reports_dates),
         "transactions": read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_codes)
     }
+
+def normalize_min_max(inputs):
+    new_inputs = [(x - min(inputs)) / (max(inputs) - min(inputs)) for x in inputs]
+    return new_inputs
+
+def conversion_second(inputs):
+    new_inputs = []
+    for i in inputs:
+        time_struct = time.strptime(i, "%Y-%m-%d %H:%M:%S")
+        new_inputs.append(time.mktime(time_struct))
+    return new_inputs
