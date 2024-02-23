@@ -1,5 +1,2 @@
 /.venv
-/clients.csv
-/report_dates.csv
-/train.csv
-/transactions.csv
+*.csv
