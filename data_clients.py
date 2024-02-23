@@ -26,7 +26,7 @@ def read_cliests(csv_file_path):
     employee_count_nms = []
     bankemplstatus_arr = []
     customer_ages = []   
-    with open(csv_file_path, "r") as file:
+    with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
@@ -48,7 +48,7 @@ def read_cliests(csv_file_path):
 def read_reports(csv_file_path):
     reports = []
     report_dt = []
-    with open(csv_file_path, "r") as file:
+    with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
@@ -65,7 +65,7 @@ def read_train(csv_file_path):
     user_ids = []
     targets = []
     times = []
-    with open(csv_file_path, "r") as file:
+    with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
@@ -83,7 +83,7 @@ def read_train(csv_file_path):
 def read_currency_rk(csv_file_path):
     arr = []
     
-    with open(csv_file_path, "r") as file:
+    with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
@@ -95,7 +95,7 @@ def read_currency_rk(csv_file_path):
 def read_mcc_codes(csv_file_path):
     arr = []
     
-    with open(csv_file_path, "r") as file:
+    with open(csv_file_path, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
@@ -139,5 +139,3 @@ def load_data():
         "reports_dates": read_reports(csv_file_path_reports_dates),
         "transactions": read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_codes)
     }
-if __name__ == "__main__":
-    print(load_data())
