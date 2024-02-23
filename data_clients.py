@@ -111,12 +111,14 @@ def read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_cod
     transaction_amts = []
     codes = read_mcc_codes(csv_file_path_mcc_codes)
     currencies = read_currency_rk(csv_file_currency)
-    with open(csv_file_path_tran, "r") as file:
+    with open(csv_file_path_tran, "r", encoding="utf-8") as file:
         csv_reader = csv.reader(file)
 
         next(csv_reader)
 
         for row in csv_reader:
+            if int(row[1]) >= len(codes):
+                break
             user_ids.append(int(row[0]))
             mcc_codes.append(codes[int(row[1])])
             currency = currencies[int(row[2])]
@@ -130,4 +132,10 @@ def read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_cod
         "transaction_amts": transaction_amts
     }
     
-read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_codes)
+def load_data():
+    return {
+        "clients": read_cliests(csv_file_path_clients),
+        "train": read_train(csv_file_path_train),
+        "reports_dates": read_reports(csv_file_path_reports_dates),
+        "transactions": read_transactions(csv_file_path_train,csv_file_currency,csv_file_path_mcc_codes)
+    }
