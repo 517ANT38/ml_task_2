@@ -137,5 +137,7 @@ def load_data():
         "clients": read_cliests(csv_file_path_clients),
         "train": read_train(csv_file_path_train),
         "reports_dates": read_reports(csv_file_path_reports_dates),
-        "transactions": read_transactions(csv_file_path_train,csv_file_currency,csv_file_path_mcc_codes)
+        "transactions": read_transactions(csv_file_path_tran,csv_file_currency,csv_file_path_mcc_codes)
     }
+if __name__ == "__main__":
+    print(load_data())
