@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
 
 # Загрузка данных
 clients = pd.read_csv('clients.csv')
@@ -24,6 +25,10 @@ data['employee_count_nm'].fillna(data['employee_count_nm'].median(), inplace=Tru
 # Выбор целевой переменной и признаков
 X = data.drop(['user_id', 'target','report'], axis=1)
 y = data['target']
+
+# Нормализация данных
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
 
 # Разделение данных на обучающий и тестовый набор
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
