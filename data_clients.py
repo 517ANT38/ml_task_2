@@ -1,5 +1,4 @@
 import csv
-import math
 import time
 
 csv_file_path_clients = "clients.csv"
