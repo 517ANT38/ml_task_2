@@ -12,11 +12,11 @@ def max_min_pre_norm(sArr):
     pre_arr = []
     for s in sArr:
         if s.startswith("БОЛЕЕ"):
-            return pre_arr.append(int(s.split(" ")[1]))
-        elif s.startswith("NA"):
-            return pre_arr.append(0)
+            pre_arr.append(int(s.split(" ")[1]))
+        elif s.startswith("Na"):
+            pre_arr.append(0)
         elif s.startswith("ДО"):
-            return pre_arr.append(int(s.split(" ")[1]))
+            pre_arr.append(int(s.split(" ")[1]))
         elif s.startswith("ОТ"):
             tmp_s = s.split(" ")
             pre_arr.append(int(tmp_s[1]))
@@ -30,7 +30,7 @@ def pre_norm(sArr):
         if s.startswith("БОЛЕЕ"):
            res.append([int(s.split(" ")[1]) + 1, tuple_max_min[1]])
         elif s.startswith("NA"):
-            res.append([0])
+            res.append([0,0])
         elif s.startswith("ДО"):
             res.append([tuple_max_min[0], int(s.split(" ")[1])])
         elif s.startswith("ОТ"):
