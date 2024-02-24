@@ -11,16 +11,18 @@ transactions = pd.read_csv('transactions.csv')
 
 # Объединение данных
 data = pd.merge(clients, train, on='user_id')
-
+data = pd.merge(data,transactions, on='user_id')
+data = pd.merge(data,report_dates,on="report")
 # Преобразование категориальных признаков в числовые
 data['employee_count_nm'] = data['employee_count_nm'].str.extract('(\d+)').astype(float)
 data['bankemplstatus'] = data['bankemplstatus'].astype(int)
-
+data['report_dt'] = pd.to_datetime(data['report_dt']).astype(int)
+data['transaction_dttm'] =  pd.to_datetime(data['transaction_dttm']).astype(int)
 # Обработка пропусков
 data['employee_count_nm'].fillna(data['employee_count_nm'].median(), inplace=True)
 
 # Выбор целевой переменной и признаков
-X = data.drop(['user_id', 'target'], axis=1)
+X = data.drop(['user_id', 'target','report'], axis=1)
 y = data['target']
 
 # Разделение данных на обучающий и тестовый набор
