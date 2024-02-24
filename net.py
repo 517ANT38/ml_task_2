@@ -9,7 +9,7 @@ clients = pd.read_csv('clients.csv')
 train = pd.read_csv('train.csv')
 report_dates = pd.read_csv('report_dates.csv')
 transactions = pd.read_csv('transactions.csv')
-
+csv_currency = list(pd.read_csv("currency_rk.csv")['currency_rk'])
 # Объединение данных
 data = pd.merge(clients, train, on='user_id')
 data = pd.merge(data,transactions, on='user_id')
@@ -22,8 +22,12 @@ data['transaction_dttm'] =  pd.to_datetime(data['transaction_dttm']).astype(int)
 # Обработка пропусков
 data['employee_count_nm'].fillna(data['employee_count_nm'].median(), inplace=True)
 
+arr_transaction_amts = []
+for i,j in zip(data['currency_rk'],data['transaction_amt']):
+    arr_transaction_amts.append(j*csv_currency[i%len(csv_currency)])
+data['transaction_amt'] = arr_transaction_amts
 # Выбор целевой переменной и признаков
-X = data.drop(['user_id', 'target','report'], axis=1)
+X = data.drop(['user_id', 'target','report','currency_rk'], axis=1)
 y = data['target']
 
 # Нормализация данных
