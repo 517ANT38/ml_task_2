@@ -8,17 +8,36 @@ csv_file_path_train = "train.csv"
 csv_file_path_tran = "transactions.csv"
 csv_file_currency = "currency_rk.csv"
 csv_file_path_mcc_codes = "mcc_codes.csv"
-def pre_norm(s,sMin,sMax):
-    if s.startswith("БОЛЕЕ"):
-        return [int(s.split(" ")[1]) + 1, sMax]
-    elif s.startswith("NA"):
-        return [0]
-    elif s.startswith("ДО"):
-        return [sMin, int(s.split(" ")[1])]
-    elif s.startswith("ОТ"):
-        tmp_s = s.split(" ")
-        return [int(tmp_s[1]), int(tmp_s[3])]
-    return None
+
+def max_min_pre_norm(sArr):
+    pre_arr = []
+    for s in sArr:
+        if s.startswith("БОЛЕЕ"):
+            return pre_arr.append(int(s.split(" ")[1]))
+        elif s.startswith("NA"):
+            return pre_arr.append(0)
+        elif s.startswith("ДО"):
+            return pre_arr.append(int(s.split(" ")[1]))
+        elif s.startswith("ОТ"):
+            tmp_s = s.split(" ")
+            pre_arr.append(int(tmp_s[1]))
+            pre_arr.append(int(tmp_s[3]))
+    return min(pre_arr),max(pre_arr)
+
+def pre_norm(sArr):
+    tuple_max_min = max_min_pre_norm(sArr)
+    res = []
+    for s in sArr:
+        if s.startswith("БОЛЕЕ"):
+           res.append([int(s.split(" ")[1]) + 1, tuple_max_min[1]])
+        elif s.startswith("NA"):
+            res.append([0])
+        elif s.startswith("ДО"):
+            res.append([tuple_max_min[0], int(s.split(" ")[1])])
+        elif s.startswith("ОТ"):
+            tmp_s = s.split(" ")
+            res.append([int(tmp_s[1]), int(tmp_s[3])])
+    return res
 
 def read_cliests(csv_file_path):
     user_ids = []
@@ -34,13 +53,13 @@ def read_cliests(csv_file_path):
         for row in csv_reader:
             user_ids.append(int(row[0]))
             reports.append(int(row[1]))
-            employee_count_nms.append(pre_norm(row[2],min(row[2]),max(row[2])))
+            employee_count_nms.append(row[2])
             bankemplstatus_arr.append(int(row[3]))
             customer_ages.append(int(row[4]))
     return {
         "user_ids": user_ids,
         "reports": reports,
-        "employee_count_nms": employee_count_nms,
+        "employee_count_nms": pre_norm(employee_count_nms),
         "bankemplstatus_arr": bankemplstatus_arr,
         "customer_ages": customer_ages
     }
